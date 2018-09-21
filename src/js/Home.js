@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
 import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 import {Button} from "./common";
+import * as actions from "../actions";
 
 class Home extends Component {
     static navigationOptions = {
@@ -8,7 +10,17 @@ class Home extends Component {
             display: 'none'
         }
     };
-    render ( ) {
+
+    generateRandomNumber = () => {
+        return Math.floor(0 + Math.random() * 10);
+    }
+
+    _onPress = () => {
+        const random = this.generateRandomNumber();
+        this.props.currentColor(random);
+        this.props.navigation.navigate('Play')
+    }
+    render () {
         return (
             <ImageBackground source={require('../assets/BackgroundHome.png')} style={{width: '100%', height: '100%'}}>
                 <View style={styles.container}>
@@ -18,7 +30,7 @@ class Home extends Component {
                         <Image source={require('../assets/Trophy.png')}/>
                         <Text style={styles.score}>1078</Text>
                     </View>
-                    <Button onPress={() => this.props.navigation.navigate('Play')}>Play</Button>
+                    <Button onPress={() => this._onPress()}>Play</Button>
                 </View>
             </ImageBackground>
         );
@@ -62,4 +74,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Home;
+export default connect(null, actions)(Home);

@@ -1,5 +1,8 @@
 import React from "react";
 import {createStackNavigator} from 'react-navigation';
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+
 import HomeScreen from "./js/Home";
 import Play from "./js/Play";
 import CameraScreen from "./js/Camera";
@@ -16,3 +19,4 @@ const App = createStackNavigator(
     );
 
 export default App;
+

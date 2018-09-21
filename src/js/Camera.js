@@ -1,8 +1,11 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {Colors} from "./constants/colors";
 import {View, Text, Dimensions, TouchableOpacity, StyleSheet, Image} from "react-native";
 import {RNCamera} from 'react-native-camera';
 import ImageButton from './common/ImageButton';
 import camera from "../assets/Camera.png";
+import ArrowLeft from "../assets/Graphics/ArrowLeft.png"
 
 class CameraScreen extends Component {
     constructor(props) {
@@ -22,7 +25,7 @@ class CameraScreen extends Component {
         if (this.camera) {
             const options = { quality: 0.5, base64: true };
             const data = await this.camera.takePictureAsync(options)
-            console.log(data.uri);
+            console.log("data camera",data);
         }
         const nbPictures = this.state.nbPictures + 1;
         this.setState ({
@@ -33,12 +36,27 @@ class CameraScreen extends Component {
         }
     };
 
+    getColor = (i) => {
+        if (i>=this.state.nbPictures) {
+            return "#073B4C";
+        }else return "#06D6A0";
+    }
+
     render() {
 
         return(
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image source={require('../assets/color.png')} style={styles.colorImage}/>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Play")}>
+                        <Image source={ArrowLeft} style={styles.backButton}/>
+                    </TouchableOpacity>
+                    <Image source={require('../assets/Paint.png')} style={[styles.colorImage, {tintColor : Colors[this.props.currentColor].color}]}/>
+                    <View style={styles.littleCamera}>
+                        <Image source={camera} style={[styles.colorImageCamera, {tintColor : this.getColor(0)}]}/>
+                        <Image source={camera} style={[styles.colorImageCamera, {tintColor : this.getColor(1)}]}/>
+                        <Image source={camera} style={[styles.colorImageCamera, {tintColor : this.getColor(2)}]}/>
+                        <Image source={camera} style={[styles.colorImageCamera, {tintColor : this.getColor(3)}]}/>
+                    </View>
                 </View>
                 <RNCamera
                     ref={cam => {
@@ -69,11 +87,22 @@ const styles = StyleSheet.create({
     header: {
         flex: 1,
         justifyContent: "space-around",
-        alignItems: "center"
+        alignItems: "center",
+        flexDirection: "row"
+    },
+    littleCamera: {
+        flexDirection: "row"
     },
     colorImage: {
-        width: 161,
-        height: 37
+        width: 73,
+        height: 60,
+        marginLeft: 30
+    },
+    colorImageCamera: {
+        width: 25,
+        height: 19,
+        marginLeft: 10,
+        marginRight: 10
     },
     preview: {
         flex: 5,
@@ -87,7 +116,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         alignSelf: 'center',
         margin: 20
+    },
+    backButton: {
+        width: 16,
+        height: 30,
+        //marginTop: 30,
+        marginLeft: -5,
+        tintColor: "#073B4C"
     }
 });
 
-export default CameraScreen;
+const mapStateToProps = state => {
+    return {
+        currentColor : state.currentColor
+    }
+}
+
+export default connect(mapStateToProps,null)(CameraScreen);

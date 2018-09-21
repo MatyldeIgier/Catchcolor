@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity} from 'react-native';
 import {Button} from "./common";
+import HomeIcon from "../assets/Graphics/HomeIcon.png";
 
 const ImageCadre = ({source, score}) => (
     <View>
@@ -21,6 +22,9 @@ class Result extends Component {
     render ( ) {
         return (
             <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%'}}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}>
+                    <Image source={HomeIcon} style={styles.homeButton}/>
+                </TouchableOpacity>
                 <View style={styles.container}>
                     <View style={styles.scoreContainer}>
                         <Image source={require('../assets/Trophy.png')}/>
@@ -59,13 +63,11 @@ const styles = StyleSheet.create({
         fontSize: 40,
         color: "#06D6A0",
         fontWeight: "500",
-        //marginBottom: 145,
         marginLeft: 15
     },
     scoreContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 10
+        flexWrap: 'wrap'
     },
     imagesLineContainer: {
         flexDirection: 'row',
@@ -99,6 +101,13 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         marginLeft: 10,
         marginRight: 10
+    },
+    homeButton: {
+        width: 25,
+        height: 25,
+        marginTop: 30,
+        marginLeft: 15,
+        tintColor: "#073B4C"
     }
 });
 
