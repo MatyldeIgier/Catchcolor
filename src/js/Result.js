@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import RNFS from "react-native-fs";
+import PixelColor from 'react-native-pixel-color';
 import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity} from 'react-native';
 import {Button} from "./common";
 import HomeIcon from "../assets/Graphics/HomeIcon.png";
+import {Colors} from "./constants/colors";
+import * as actions from "../actions";
 
 const ImageCadre = ({source, score}) => (
     <View>
@@ -14,34 +19,76 @@ const ImageCadre = ({source, score}) => (
 );
 
 class Result extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: 4
+        }
+    }
+
     static navigationOptions = {
         headerStyle: {
             display: 'none'
         }
     };
-    render ( ) {
+
+    deleteDataCache = (path) => {
+        return RNFS.unlink(path)
+            .then(() => {
+                console.log('FILE DELETED: ',path);
+            })
+            // `unlink` will throw an error, if the item to unlink does not exist
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+    deleteCache = () => {
+        this.props.pictures.map (picture => {
+            this.deleteDataCache(picture.pictureURI);
+        })
+    }
+
+    // componentDidMount () {
+    //     let currentScore = null;
+    //     this.props.pictures.map((picture) => {
+    //             currentScore = this.computeScore(picture.pictureURI, Colors[this.props.currentColor].color);
+    //             this.props.setPictureScore(picture.id, currentScore);
+    //             this.setState({
+    //                 loading: this.state.loading -1
+    //             })
+    //         }
+    //     )
+    // }
+
+    render () {
         return (
             <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%'}}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}>
-                    <Image source={HomeIcon} style={styles.homeButton}/>
-                </TouchableOpacity>
-                <View style={styles.container}>
-                    <View style={styles.scoreContainer}>
-                        <Image source={require('../assets/Trophy.png')}/>
-                        <Text style={styles.score}>1369</Text>
-                    </View>
-                    <View>
-                        <View style={styles.imagesLineContainer}>
-                            <ImageCadre source={require('../assets/ImageTest.png')} score={1023}/>
-                            <ImageCadre source={require('../assets/ImageTest.png')} score={36}/>
+                    <TouchableOpacity onPress={() => {
+                        this.deleteCache();
+                        this.props.navigation.navigate("Home")
+                    }
+                    }
+                    >
+                        <Image source={HomeIcon} style={styles.homeButton}/>
+                    </TouchableOpacity>
+                    <View style={styles.container}>
+                        <View style={styles.scoreContainer}>
+                            <Image source={require('../assets/Trophy.png')}/>
+                            <Text style={styles.score}>1369</Text>
                         </View>
                         <View style={styles.imagesLineContainer}>
-                            <ImageCadre source={require('../assets/ImageTest.png')} score={305}/>
-                            <ImageCadre source={require('../assets/ImageTest.png')} score={5}/>
+                            {this.props.pictures.map(picture =>
+                                <ImageCadre key={picture.id} source={{uri: picture.pictureURI}} score={102}/>
+                            )}
                         </View>
+                        <Button onPress={() => {
+                            this.deleteCache();
+                            this.props.navigation.navigate('Play')
+                            }
+                        }
+                        >Play</Button>
                     </View>
-                    <Button onPress={() => this.props.navigation.navigate('Play')}>Play</Button>
-                </View>
             </ImageBackground>
         );
     }
@@ -71,12 +118,14 @@ const styles = StyleSheet.create({
     },
     imagesLineContainer: {
         flexDirection: 'row',
+        justifyContent: "space-evenly",
+        flexWrap: "wrap",
         marginBottom: 10,
         marginTop: 10
     },
     image: {
-        marginLeft: 10,
-        marginRight: 10,
+        marginTop: 10,
+        marginBottom: 10,
         minWidth: 138,
         minHeight: 152,
         justifyContent: "flex-end",
@@ -111,4 +160,11 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Result;
+const mapStateToProps = state => {
+    return {
+        currentColor : state.currentColor,
+        pictures : state.pictures
+    }
+}
+
+export default connect(mapStateToProps,actions)(Result);

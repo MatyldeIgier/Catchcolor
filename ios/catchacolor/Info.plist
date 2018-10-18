@@ -57,6 +57,6 @@
 		<string>SF-Pro-Text-Regular.otf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-    <string>Your message to user when the camera is accessed for the first time</string>
+	<string>Your message to user when the camera is accessed for the first time</string>
 </dict>
 </plist>

@@ -17,7 +17,7 @@ class Home extends Component {
 
     _onPress = () => {
         const random = this.generateRandomNumber();
-        this.props.currentColor(random);
+        this.props.setCurrentColor(random);
         this.props.navigation.navigate('Play')
     }
     render () {
