@@ -5,6 +5,9 @@ import {Button} from "./common";
 import * as actions from "../actions";
 
 class Home extends Component {
+    constructor(props) {
+        super(props);
+    }
     static navigationOptions = {
         headerStyle: {
             display: 'none'
@@ -21,6 +24,7 @@ class Home extends Component {
         this.props.navigation.navigate('Play')
     }
     render () {
+        console.log("maxscore", this.props.maxScore)
         return (
             <ImageBackground source={require('../assets/BackgroundHome.png')} style={{width: '100%', height: '100%'}}>
                 <View style={styles.container}>
@@ -28,7 +32,7 @@ class Home extends Component {
                     <Image style={styles.logo} source={require('../assets/catchColor.png')} />
                     <View style={styles.scoreContainer}>
                         <Image source={require('../assets/Trophy.png')}/>
-                        <Text style={styles.score}>1078</Text>
+                        <Text style={styles.score}>{this.props.maxScore}</Text>
                     </View>
                     <Button onPress={() => this._onPress()}>Play</Button>
                 </View>
@@ -74,4 +78,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(null, actions)(Home);
+const mapStateToProps = state => {
+    return {
+        maxScore : state.maxScore.maxScore
+    }
+}
+
+export default connect(mapStateToProps, actions)(Home);

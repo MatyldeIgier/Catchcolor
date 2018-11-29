@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import RNFS from "react-native-fs";
 import PixelColor from 'react-native-pixel-color';
-import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, ActivityIndicator} from 'react-native';
 import {Button} from "./common";
 import HomeIcon from "../assets/Graphics/HomeIcon.png";
 import {Colors} from "./constants/colors";
 import * as actions from "../actions";
+
+import ColorPixels from "../NativeModules/ColorPixels";
 
 const ImageCadre = ({source, score}) => (
     <View>
@@ -22,7 +24,8 @@ class Result extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: 4
+            loading: true,
+            currentScoreTotal: 0
         }
     }
 
@@ -32,40 +35,107 @@ class Result extends Component {
         }
     };
 
-    deleteDataCache = (path) => {
-        return RNFS.unlink(path)
-            .then(() => {
-                console.log('FILE DELETED: ',path);
-            })
-            // `unlink` will throw an error, if the item to unlink does not exist
-            .catch((err) => {
-                console.log(err.message);
+/*     isSimilarHexa = (hex1, hex2, ratio) => {
+        // get red/green/blue int values of hex1
+        const r1 = parseInt(hex1.substring(0, 2), 16);
+        const g1 = parseInt(hex1.substring(2, 4), 16);
+        const b1 = parseInt(hex1.substring(4, 6), 16);
+        // get red/green/blue int values of hex2
+        const r2 = parseInt(hex2.substring(0, 2), 16);
+        const g2 = parseInt(hex2.substring(2, 4), 16);
+        const b2 = parseInt(hex2.substring(4, 6), 16);
+        // calculate differences between reds, greens and blues
+        let r = 255 - Math.abs(r1 - r2);
+        let g = 255 - Math.abs(g1 - g2);
+        let b = 255 - Math.abs(b1 - b2);
+        // limit differences between 0 and 1
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        // 0 means opposit colors, 1 means same colors
+        let ratioSimilar = (r + g + b) / 3;
+        return (ratioSimilar > ratio);
+    } */
+
+    computeScore = async (imageURI, colorImage,pictureId) => {
+            let score = 0;
+            await ColorPixels.getPixelColorHex(imageURI, function(res) {
+                console.log("In Callback Native Module", res);
+                let colorsRes = res.colors;
+                for(let color of colorsRes){
+                        // get red/green/blue int values of hex1
+                        const r1 = parseInt(colorImage.substring(0, 2), 16);
+                        const g1 = parseInt(colorImage.substring(2, 4), 16);
+                        const b1 = parseInt(colorImage.substring(4, 6), 16);
+                        // get red/green/blue int values of hex2
+                        const r2 = parseInt(color.substring(0, 2), 16);
+                        const g2 = parseInt(color.substring(2, 4), 16);
+                        const b2 = parseInt(color.substring(4, 6), 16);
+                        // calculate differences between reds, greens and blues
+                        let r = 255 - Math.abs(r1 - r2);
+                        let g = 255 - Math.abs(g1 - g2);
+                        let b = 255 - Math.abs(b1 - b2);
+                        // limit differences between 0 and 1
+                        r /= 255;
+                        g /= 255;
+                        b /= 255;
+                        // 0 means opposit colors, 1 means same colors
+                        let ratioSimilar = (r + g + b) / 3;
+                        if (ratioSimilar > 0.8) {
+                            score++;
+                        }
+                } 
+                console.log("score",score);
+            }); 
+            /* 
+             const {width, height} = await new Promise((resolve,reject) => {
+                Image.getSize(imageURI, (width, height) => {
+                    resolve({width, height})
+                })
             });
+             let x;
+            let y;
+            const colorPromises = [];
+                for (x = 0; x < width; x=x+10) {
+                    for(y=0; y<height; y=y+10) {
+                            colorPromises.push( PixelColor.getHex(imageURI, { x, y }) );
+                        
+                    }
+                };
+                const colors = await Promise.all(colorPromises); */  
+            return score;
     }
 
-    deleteCache = () => {
-        this.props.pictures.map (picture => {
-            this.deleteDataCache(picture.pictureURI);
-        })
+    algo = async () => {
+            let currentScoreTotal = 0;
+             for(let picture of this.props.pictures) {
+                const currentScore = await this.computeScore(picture.pictureURI, Colors[this.props.currentColor].color, picture.id);
+                this.props.setPictureScore(picture.id, currentScore);
+                currentScoreTotal = currentScoreTotal + currentScore;
+            } 
+            if (currentScoreTotal > this.props.maxScore) {
+                this.props.setMaxScore(currentScoreTotal)
+            }
+            return await this.setState({
+                currentScoreTotal,
+                loading: false
+            })  
+        
     }
 
-    // componentDidMount () {
-    //     let currentScore = null;
-    //     this.props.pictures.map((picture) => {
-    //             currentScore = this.computeScore(picture.pictureURI, Colors[this.props.currentColor].color);
-    //             this.props.setPictureScore(picture.id, currentScore);
-    //             this.setState({
-    //                 loading: this.state.loading -1
-    //             })
-    //         }
-    //     )
-    // }
+     componentDidMount () {
+         let currentScore = null;
+       setTimeout(()=> {
+        new Promise.resolve().then( () => {
+            return this.algo();
+         })
+       },400)
+         }
 
     render () {
         return (
             <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%'}}>
                     <TouchableOpacity onPress={() => {
-                        this.deleteCache();
                         this.props.navigation.navigate("Home")
                     }
                     }
@@ -73,18 +143,20 @@ class Result extends Component {
                         <Image source={HomeIcon} style={styles.homeButton}/>
                     </TouchableOpacity>
                     <View style={styles.container}>
-                        <View style={styles.scoreContainer}>
-                            <Image source={require('../assets/Trophy.png')}/>
-                            <Text style={styles.score}>1369</Text>
-                        </View>
+                        {this.state.loading === true 
+                            ?   <ActivityIndicator size="large" color="#0000ff" />
+                            :   <View style={styles.scoreContainer}>
+                                    <Image source={require('../assets/Trophy.png')}/>
+                                    <Text style={styles.score}>{this.state.currentScoreTotal}</Text>
+                                </View>
+                        }
                         <View style={styles.imagesLineContainer}>
                             {this.props.pictures.map(picture =>
-                                <ImageCadre key={picture.id} source={{uri: picture.pictureURI}} score={102}/>
+                                <ImageCadre key={picture.id} resizeMethod={"resize"} source={{uri: picture.pictureURI}} score={picture.score !== "undefined" ? picture.score : "waiting"}/>
                             )}
                         </View>
                         <Button onPress={() => {
-                            this.deleteCache();
-                            this.props.navigation.navigate('Play')
+                                this.props.navigation.navigate('Play')
                             }
                         }
                         >Play</Button>
@@ -163,7 +235,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         currentColor : state.currentColor,
-        pictures : state.pictures
+        pictures : state.pictures,
+        maxScore : state.maxScore
     }
 }
 

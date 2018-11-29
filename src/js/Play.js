@@ -20,7 +20,7 @@ class Play extends Component {
                 </TouchableOpacity>
                 <View style={styles.container}>
                     <Text style={styles.text}>Take 4 pictures {"\n"} which contain the {"\n"} following colour</Text>
-                    <Image source={require('../assets/Paint.png')} style={{tintColor : Colors[this.props.currentColor].color}}/>
+                    <Image source={require('../assets/Paint.png')} style={{tintColor : Colors[this.props.currentColor].color, marginTop: -20}}/>
                     <ImageButton image={camera} onPress={() => this.props.navigation.navigate("CameraScreen")}/>
                 </View>
             </ImageBackground>
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         flex: 9,
         justifyContent: 'space-around',
         alignItems: 'center',
+        marginTop: -60
     },
     text: {
         color: "#073B4C",

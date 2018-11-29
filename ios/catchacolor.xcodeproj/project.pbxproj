@@ -37,7 +37,9 @@
 		2DCD954D1E0B4F2C00145EB5 /* catchacolorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* catchacolorTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		3ACA53F546054E0C88119077 /* libRNPixelColor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3938A7A83BC14774AF382602 /* libRNPixelColor.a */; };
-		4E17A8CE2156938D00F29F74 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E17A8CD2156938D00F29F74 /* Splash.png */; };
+		4EAD3270217B277C00B90C47 /* CalendarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD326F217B277C00B90C47 /* CalendarManager.swift */; };
+		4EAD3272217B27DA00B90C47 /* CalendarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAD3271217B27DA00B90C47 /* CalendarManager.m */; };
+		4EE5BF1721B060E1009FACD6 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 4EE5BEED21B060DF009FACD6 /* Splash.png */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		A3DEDF936EDF4EAB85C3FAC4 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D38B682CFE1A488E833F8F1A /* SF-Pro-Text-Regular.otf */; };
@@ -374,7 +376,10 @@
 		2D02E4901E0B4A5D006451C7 /* catchacolor-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "catchacolor-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3938A7A83BC14774AF382602 /* libRNPixelColor.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNPixelColor.a; sourceTree = "<group>"; };
-		4E17A8CD2156938D00F29F74 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Splash.png; sourceTree = "<group>"; };
+		4EAD326E217B277B00B90C47 /* catchacolor-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "catchacolor-Bridging-Header.h"; sourceTree = "<group>"; };
+		4EAD326F217B277C00B90C47 /* CalendarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarManager.swift; sourceTree = "<group>"; };
+		4EAD3271217B27DA00B90C47 /* CalendarManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalendarManager.m; sourceTree = "<group>"; };
+		4EE5BEED21B060DF009FACD6 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Splash.png; path = "../../../Desktop/Travail Indépendant/CatchColor/Splash.png"; sourceTree = "<group>"; };
 		51CC3DDB966D474B9782901F /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		5441AE5B997F4FF8818CEA0F /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -528,7 +533,9 @@
 		13B07FAE1A68108700A75B9A /* catchacolor */ = {
 			isa = PBXGroup;
 			children = (
-				4E17A8CD2156938D00F29F74 /* Splash.png */,
+				4EAD326F217B277C00B90C47 /* CalendarManager.swift */,
+				4EAD3271217B27DA00B90C47 /* CalendarManager.m */,
+				4EE5BEED21B060DF009FACD6 /* Splash.png */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -536,6 +543,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				4EAD326E217B277B00B90C47 /* catchacolor-Bridging-Header.h */,
 			);
 			name = catchacolor;
 			sourceTree = "<group>";
@@ -790,6 +798,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = G99K885NK6;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -1190,8 +1199,8 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				4E17A8CE2156938D00F29F74 /* Splash.png in Resources */,
 				F6BFFB5C07534732AD24447E /* FredokaOne-Regular.ttf in Resources */,
+				4EE5BF1721B060E1009FACD6 /* Splash.png in Resources */,
 				A3DEDF936EDF4EAB85C3FAC4 /* SF-Pro-Text-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1257,8 +1266,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EAD3272217B27DA00B90C47 /* CalendarManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				4EAD3270217B277C00B90C47 /* CalendarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1310,6 +1321,7 @@
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1342,6 +1354,7 @@
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
@@ -1372,6 +1385,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1392,6 +1406,9 @@
 				);
 				PRODUCT_NAME = catchacolor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "catchacolor-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1400,6 +1417,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1419,6 +1437,8 @@
 				);
 				PRODUCT_NAME = catchacolor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "catchacolor-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
