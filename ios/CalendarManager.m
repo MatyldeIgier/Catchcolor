@@ -17,7 +17,7 @@ RCT_EXTERN_METHOD(addEvent:(NSString *)name location:(NSString *)location date:(
 
 RCT_EXTERN_METHOD(increment)
 RCT_EXTERN_METHOD(getCount: (RCTResponseSenderBlock)callback)
-RCT_EXTERN_METHOD(getPixelColorHex:(NSString *)path callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getPixelColorHex:(NSString *)path refr:(NSInteger *)refr refg:(NSInteger *)refg refb:(NSInteger *)refb callback:(RCTResponseSenderBlock)callback)
 
 
 @end

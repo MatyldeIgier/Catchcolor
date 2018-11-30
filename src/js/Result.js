@@ -59,19 +59,24 @@ class Result extends Component {
 
     computeScore = async (imageURI, colorImage,pictureId) => {
             let score = 0;
+            const colorR = parseInt(colorImage.substring(1, 3), 16);
+            const colorG = parseInt(colorImage.substring(3, 5), 16);
+            const colorB = parseInt(colorImage.substring(5, 7), 16);
+            console.log("col", colorR,colorG,colorB)
+            console.log("colorImage",colorImage);
             const promiseColors = await new Promise((resolve,reject) => {
-                ColorPixels.getPixelColorHex(imageURI, function(res) {
+                ColorPixels.getPixelColorHex(imageURI, colorR, colorG, colorB, function(res) {
                     console.log("In Callback Native Module", res);
                     let colorsRes = res.colors;
                     resolve(colorsRes)
                 }); 
-            });
-            for(let color of promiseColors) {
+            }); 
+            /* for(let color of promiseColors) {
                 if(this.isSimilarHexa(colorImage,color,0.8)) {
                     score++;
                 }
-            }
-            return score;
+            } */ 
+            return promiseColors;
     }
 
     algo = async () => {
