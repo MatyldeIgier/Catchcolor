@@ -35,7 +35,7 @@ class Result extends Component {
         }
     };
 
-/*     isSimilarHexa = (hex1, hex2, ratio) => {
+    isSimilarHexa = (hex1, hex2, ratio) => {
         // get red/green/blue int values of hex1
         const r1 = parseInt(hex1.substring(0, 2), 16);
         const g1 = parseInt(hex1.substring(2, 4), 16);
@@ -55,54 +55,22 @@ class Result extends Component {
         // 0 means opposit colors, 1 means same colors
         let ratioSimilar = (r + g + b) / 3;
         return (ratioSimilar > ratio);
-    } */
+    } 
 
     computeScore = async (imageURI, colorImage,pictureId) => {
             let score = 0;
-            await ColorPixels.getPixelColorHex(imageURI, function(res) {
-                console.log("In Callback Native Module", res);
-                let colorsRes = res.colors;
-                for(let color of colorsRes){
-                        // get red/green/blue int values of hex1
-                        const r1 = parseInt(colorImage.substring(0, 2), 16);
-                        const g1 = parseInt(colorImage.substring(2, 4), 16);
-                        const b1 = parseInt(colorImage.substring(4, 6), 16);
-                        // get red/green/blue int values of hex2
-                        const r2 = parseInt(color.substring(0, 2), 16);
-                        const g2 = parseInt(color.substring(2, 4), 16);
-                        const b2 = parseInt(color.substring(4, 6), 16);
-                        // calculate differences between reds, greens and blues
-                        let r = 255 - Math.abs(r1 - r2);
-                        let g = 255 - Math.abs(g1 - g2);
-                        let b = 255 - Math.abs(b1 - b2);
-                        // limit differences between 0 and 1
-                        r /= 255;
-                        g /= 255;
-                        b /= 255;
-                        // 0 means opposit colors, 1 means same colors
-                        let ratioSimilar = (r + g + b) / 3;
-                        if (ratioSimilar > 0.8) {
-                            score++;
-                        }
-                } 
-                console.log("score",score);
-            }); 
-            /* 
-             const {width, height} = await new Promise((resolve,reject) => {
-                Image.getSize(imageURI, (width, height) => {
-                    resolve({width, height})
-                })
+            const promiseColors = await new Promise((resolve,reject) => {
+                ColorPixels.getPixelColorHex(imageURI, function(res) {
+                    console.log("In Callback Native Module", res);
+                    let colorsRes = res.colors;
+                    resolve(colorsRes)
+                }); 
             });
-             let x;
-            let y;
-            const colorPromises = [];
-                for (x = 0; x < width; x=x+10) {
-                    for(y=0; y<height; y=y+10) {
-                            colorPromises.push( PixelColor.getHex(imageURI, { x, y }) );
-                        
-                    }
-                };
-                const colors = await Promise.all(colorPromises); */  
+            for(let color of promiseColors) {
+                if(this.isSimilarHexa(colorImage,color,0.8)) {
+                    score++;
+                }
+            }
             return score;
     }
 
