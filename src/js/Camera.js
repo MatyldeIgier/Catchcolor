@@ -70,6 +70,11 @@ class CameraScreen extends Component {
                      currentScore = this.computeScore(picture.pictureURI, Colors[this.props.currentColor].color,picture.id);
                  }
              ) */
+             this.props.setPictureScore(0, null);
+             this.props.setPictureScore(1, null);
+             this.props.setPictureScore(2, null);
+             this.props.setPictureScore(3, null);
+             
              this.props.navigation.navigate("Result");
         }
     };

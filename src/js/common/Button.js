@@ -6,6 +6,7 @@ function Button(props){
         <TouchableOpacity
             style={styles.buttonStyle}
             onPress={props.onPress}
+            disabled={props.disabled}
         >
             <Text style={styles.textStyle}>{props.children}</Text>
         </TouchableOpacity>

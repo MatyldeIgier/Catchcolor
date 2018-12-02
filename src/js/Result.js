@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import RNFS from "react-native-fs";
 import PixelColor from 'react-native-pixel-color';
-import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, ActivityIndicator, AsyncStorage} from 'react-native';
 import {Button} from "./common";
 import HomeIcon from "../assets/Graphics/HomeIcon.png";
 import {Colors} from "./constants/colors";
@@ -25,7 +25,9 @@ class Result extends Component {
         super(props);
         this.state = {
             loading: true,
-            currentScoreTotal: 0
+            currentScoreTotal: 0,
+            best: false,
+            computeScore: true
         }
     }
 
@@ -62,11 +64,8 @@ class Result extends Component {
             const colorR = parseInt(colorImage.substring(1, 3), 16);
             const colorG = parseInt(colorImage.substring(3, 5), 16);
             const colorB = parseInt(colorImage.substring(5, 7), 16);
-            console.log("col", colorR,colorG,colorB)
-            console.log("colorImage",colorImage);
             const promiseColors = await new Promise((resolve,reject) => {
                 ColorPixels.getPixelColorHex(imageURI, colorR, colorG, colorB, function(res) {
-                    console.log("In Callback Native Module", res);
                     let colorsRes = res.colors;
                     resolve(colorsRes)
                 }); 
@@ -83,17 +82,31 @@ class Result extends Component {
             let currentScoreTotal = 0;
              for(let picture of this.props.pictures) {
                 const currentScore = await this.computeScore(picture.pictureURI, Colors[this.props.currentColor].color, picture.id);
+                console.log("currentscore",picture.id,currentScore);
                 this.props.setPictureScore(picture.id, currentScore);
                 currentScoreTotal = currentScoreTotal + currentScore;
             } 
-            if (currentScoreTotal > this.props.maxScore) {
+            if (currentScoreTotal > this.props.maxScore.maxScore) {
                 this.props.setMaxScore(currentScoreTotal)
+                AsyncStorage.setItem('maxScore',''+currentScoreTotal);
+                this.setState({best: true})
             }
             return await this.setState({
                 currentScoreTotal,
-                loading: false
+                loading: false,
+                computeScore: false
             })  
         
+    }
+
+    generateRandomNumber = () => {
+        return Math.floor(0 + Math.random() * 10);
+    }
+
+    _onPress = () => {
+        const random = this.generateRandomNumber();
+        this.props.setCurrentColor(random);
+        this.props.navigation.navigate('Play')
     }
 
      componentDidMount () {
@@ -108,7 +121,7 @@ class Result extends Component {
     render () {
         return (
             <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%'}}>
-                    <TouchableOpacity onPress={() => {
+                    <TouchableOpacity style={styles.buttonLeft} onPress={() => {
                         this.props.navigation.navigate("Home")
                     }
                     }
@@ -116,23 +129,28 @@ class Result extends Component {
                         <Image source={HomeIcon} style={styles.homeButton}/>
                     </TouchableOpacity>
                     <View style={styles.container}>
-                        {this.state.loading === true 
-                            ?   <ActivityIndicator size="large" color="#0000ff" />
-                            :   <View style={styles.scoreContainer}>
-                                    <Image source={require('../assets/Trophy.png')}/>
-                                    <Text style={styles.score}>{this.state.currentScoreTotal}</Text>
-                                </View>
-                        }
+                        <View style={styles.resultContainer}>
+                            <Image source={require('../assets/Paint.png')} style={[styles.colorImage, {tintColor : Colors[this.props.currentColor].color}]}/>
+                            {this.state.loading === true 
+                                ?   <ActivityIndicator size="large" color="#0000ff" />
+                                :   <View style={styles.scoreContainer}>
+                                        <View style={styles.trophyContainer}>
+                                            <Image source={require('../assets/Trophy.png')}/>
+                                            {this.state.best 
+                                                ? <Text style={styles.best}>BEST</Text>
+                                                : null
+                                            }
+                                        </View>
+                                        <Text style={styles.score}>{this.state.currentScoreTotal}</Text>
+                                    </View>
+                            }
+                        </View>
                         <View style={styles.imagesLineContainer}>
                             {this.props.pictures.map(picture =>
-                                <ImageCadre key={picture.id} resizeMethod={"resize"} source={{uri: picture.pictureURI}} score={picture.score !== "undefined" ? picture.score : "waiting"}/>
+                                <ImageCadre key={picture.id} resizeMethod={"resize"} source={{uri: picture.pictureURI}} score={picture.score !== null ? picture.score : "..."}/>
                             )}
                         </View>
-                        <Button onPress={() => {
-                                this.props.navigation.navigate('Play')
-                            }
-                        }
-                        >Play</Button>
+                        <Button onPress={() => this._onPress()} disabled={this.state.computeScore}>Play</Button>
                     </View>
             </ImageBackground>
         );
@@ -199,9 +217,31 @@ const styles = StyleSheet.create({
     homeButton: {
         width: 25,
         height: 25,
+        tintColor: "#073B4C"
+    },
+    buttonLeft: {
+        width: 25,
+        height: 25,
         marginTop: 30,
         marginLeft: 15,
-        tintColor: "#073B4C"
+    },
+    colorImage: {
+        width: 70,
+        height: 70,
+        marginRight: 30
+    },
+    resultContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    trophyContainer: {
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    best: {
+        fontSize: 18,
+        color: '#FFD166',
+        fontWeight: 'bold'
     }
 });
 

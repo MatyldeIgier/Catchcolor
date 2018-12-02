@@ -14,10 +14,15 @@ class Play extends Component {
     };
     render ( ) {
         return (
-            <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%'}}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Home")}>
-                    <Image source={arrowLeft} style={styles.backButton}/>
-                </TouchableOpacity>
+            <ImageBackground source={require('../assets/BackgroundPlay.png')} style={{width: '100%', height: '100%', flex: 1}}>
+                <View>
+                    <TouchableOpacity style={styles.buttonLeft} onPress={() => {
+                        console.log("press play back")
+                        this.props.navigation.navigate("Home")
+                        }}>
+                        <Image source={arrowLeft} style={styles.backButton}/>
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.container}>
                     <Text style={styles.text}>Take 4 pictures {"\n"} which contain the {"\n"} following colour</Text>
                     <Image source={require('../assets/Paint.png')} style={{tintColor : Colors[this.props.currentColor].color, marginTop: -20}}/>
@@ -33,7 +38,7 @@ const styles = StyleSheet.create({
         flex: 9,
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginTop: -60
+        zIndex: 8,
     },
     text: {
         color: "#073B4C",
@@ -44,9 +49,13 @@ const styles = StyleSheet.create({
     backButton: {
         width: 16,
         height: 30,
+        tintColor: "#073B4C"
+    },
+    buttonLeft: {
+        width: 16,
+        height: 30,
         marginTop: 30,
         marginLeft: 15,
-        tintColor: "#073B4C"
     }
 });
 

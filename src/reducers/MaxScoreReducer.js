@@ -9,7 +9,7 @@ export default (state = initState, action) => {
         case SET_MAX_SCORE:
             console.log("set max score");
             return { 
-                maxScore: action.payload.score
+                maxScore: action.payload
             }
         default:
             return state;

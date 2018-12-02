@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground, AsyncStorage} from 'react-native';
 import {Button} from "./common";
 import * as actions from "../actions";
 
@@ -14,6 +14,14 @@ class Home extends Component {
         }
     };
 
+    componentDidMount() {
+        AsyncStorage.getItem('maxScore').then( score => {
+            if (score) {
+                this.props.setMaxScore(Number(score))
+            }
+        })
+    }
+
     generateRandomNumber = () => {
         return Math.floor(0 + Math.random() * 10);
     }
@@ -24,7 +32,7 @@ class Home extends Component {
         this.props.navigation.navigate('Play')
     }
     render () {
-        console.log("maxscore", this.props.maxScore)
+        console.log("home maxscore", this.props.maxScore)
         return (
             <ImageBackground source={require('../assets/BackgroundHome.png')} style={{width: '100%', height: '100%'}}>
                 <View style={styles.container}>
