@@ -150,7 +150,7 @@ class Result extends Component {
                                 <ImageCadre key={picture.id} resizeMethod={"resize"} source={{uri: picture.pictureURI}} score={picture.score !== null ? picture.score : "..."}/>
                             )}
                         </View>
-                        <Button onPress={() => this._onPress()} disabled={this.state.computeScore}>Play</Button>
+                        <Button onPress={() => this._onPress()} disabled={this.state.computeScore}>Play again</Button>
                     </View>
             </ImageBackground>
         );

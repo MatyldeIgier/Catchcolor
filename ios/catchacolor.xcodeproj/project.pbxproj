@@ -1404,6 +1404,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.citron.SpeedometerPremium;
 				PRODUCT_NAME = catchacolor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "catchacolor-Bridging-Header.h";
@@ -1435,6 +1436,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.citron.SpeedometerPremium;
 				PRODUCT_NAME = catchacolor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "catchacolor-Bridging-Header.h";
